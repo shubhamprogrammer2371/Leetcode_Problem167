@@ -1,0 +1,63 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* twoSum(int* numbers, int numbersSize, int target, int* returnSize){
+    *returnSize = 2;
+    int *res = malloc(2*sizeof(int)), start = 0, end = numbersSize - 1;
+    
+    while(1)
+    {
+        int sum = numbers[start] + numbers[end];
+        if (sum == target)
+        {
+            res[0] = start+1;
+            res[1] = end+1;
+            return res;
+        }
+        start += (sum < target) ? 1 : 0;
+        end -= (sum > target) ? 1 : 0;
+    }
+}
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+int searchInsert(int* nums, int numsSize, int target){
+    int start = 0, end = numsSize - 1, mid = 0;
+    while (start <= end) 
+    {
+        mid = (start + end)/ 2;
+        if (nums[mid] == target)
+            return mid;
+        if (nums[mid] < target)
+            start = mid + 1;
+        else
+            end = mid - 1;
+    }
+    return (mid > (numsSize-1)) ? mid : (target > nums[mid]) ? mid + 1 : mid;
+}   
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* twoSum(int* numbers, int numbersSize, int target, int* returnSize){
+    int i = 0 , j = searchInsert(numbers,numbersSize,target) - 1;
+    if(j == -1)
+        j = 0;
+    int* returnArray = malloc(sizeof(int)*2);
+    *returnSize = 0;
+    while(((i <= j) && j) || ((i < numbersSize) && (j > -1)))
+    {
+        if(((numbers[i] + numbers[j]) == target) && (i != j))
+        {
+            returnArray[(*returnSize)++] = (i < j) ? i + 1 : j + 1;
+            returnArray[(*returnSize)++] = (i < j) ? j + 1 : i + 1;
+            return returnArray;
+        }
+        else if((numbers[i] + numbers[j]) > target)
+            j--;
+        else
+            i++;
+    }
+    return returnArray;
+}
